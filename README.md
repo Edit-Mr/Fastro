@@ -21,6 +21,8 @@ EM's Website starter template using Astro and Fastify.
 - **Prettier**: Code formatter to maintain consistent style.
 - **concurrently**: Run frontend and backend at the same time.
 
+> i18n details [below](#i18n)
+
 ## How to use
 
 Press the "Use this template" button at the top right to create a new repository with this template.
@@ -67,6 +69,9 @@ pnpm build:frontend
 
 Deploying Node.js app is easy AF. Astro is a static site generator, so you can deploy it to any static hosting service, GitHub Pages, Vercel, Cloudflare Pages, Netlify, Zeabur... whatever you like. Fastify can be deployed to any Node.js hosting service.
 
+<details>
+<summary>Zeabur (Astro + Fastify)</summary>
+
 ### Zeabur (Astro + Fastify)
 
 Choose to deploy from GitHub or wherever you want. Frontend should be deployed as default since it is the first one.
@@ -89,6 +94,11 @@ Here's a simple Caddyfile example that reverse proxies `/api` path requests and 
 }
 ```
 
+</details>
+
+<details>
+<summary>Github Pages (Astro)</summary>
+
 ### Github Pages (Astro)
 
 GitHub Pages only supports static files, so you can only deploy the frontend. Config the workflow in `.github/workflows/gh-pages.yml` to your repository to turn on the trigger.
@@ -100,3 +110,48 @@ on:
         paths: ["frontend/**"]
     workflow_dispatch:
 ```
+
+</details>
+
+## i18n
+
+This project supports i18n (internationalization). To use it, please follow these steps:
+
+1. Import the i18n module in your Astro component.
+2. Set the `t` function with the desired locale.
+3. Use the `l` function to generate localized URLs. Enter relative paths. For example,
+
+- Link to the "About" page with current lang: `l("/about/")`.
+- Link to current page with English lang: `l("", "en")`.
+
+Here's a full example frm `frontend/src/components/Nav.astro`:
+
+```astro
+---
+import * as i18n from "src/i18n";
+const l = i18n.l(Astro.url);
+const t = i18n.t(i18n.local(Astro.url.pathname), {
+	about: {
+		en: "About",
+		"zh-Hant": "關於",
+		"zh-Hans": "关于"
+	},
+	blog: {
+		en: "Blog",
+		"zh-Hant": "部落格",
+		"zh-Hans": "博客"
+	}
+});
+---
+
+<nav>
+	<a href={l("/about/")}><span>{t.about}</span></a>
+	<a href={l("", "en")} data-lang="en">English</a>
+	<a href={l("", "zh-Hant")} data-lang="zh-Hant">繁體中文</a>
+	<a href={l("", "zh-Hans")} data-lang="zh-Hans">简体中文</a>
+</nav>
+```
+
+## License
+
+This project is made by Elvis Mao, licensed under [Apache 2.0](LICENSE).
