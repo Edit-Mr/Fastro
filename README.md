@@ -37,7 +37,7 @@ Press the "Use this template" button at the top right to create a new repository
 ├── backend/    # Fastify
 ```
 
-if you only want to use one of them, kust simply delete the other folder, and move all files to the root.
+if you only want to use one of them, just simply delete the other folder, and move all files to the root.
 
 ## Development
 
@@ -65,7 +65,9 @@ pnpm build:frontend
 
 ## How to Deploy
 
-### Zeabur
+Deploying Node.js app is easy AF. Astro is a static site generator, so you can deploy it to any static hosting service, GitHub Pages, Vercel, Cloudflare Pages, Netlify, Zeabur... whatever you like. Fastify can be deployed to any Node.js hosting service.
+
+### Zeabur (Astro + Fastify)
 
 Choose to deploy from GitHub or wherever you want. Frontend should be deployed as default since it is the first one.
 
@@ -73,4 +75,28 @@ If you wanna deploy backend, you can add the following environment variables:
 
 ```plaintext
 ZBPACK_APP_DIR=backend
+```
+
+Both projects can be deployed in one Project, but as two separate services. You can use Caddy or Nginx for reverse proxy.
+
+Here's a simple Caddyfile example that reverse proxies `/api` path requests and `/openapi.json` to the backend service, and everything else to the frontend:
+
+```plaintext
+:80 {
+    @backend path /api* /openapi.json
+    reverse_proxy @backend backend.zeabur.internal:8000
+    reverse_proxy frontend.zeabur.internal:8080
+}
+```
+
+### Github Pages (Astro)
+
+GitHub Pages only supports static files, so you can only deploy the frontend. Config the workflow in `.github/workflows/gh-pages.yml` to your repository to turn on the trigger.
+
+```yml
+on:
+    push:
+        branches: ["main"]
+        paths: ["frontend/**"]
+    workflow_dispatch:
 ```

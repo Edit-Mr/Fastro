@@ -43,7 +43,7 @@
 
 > 確保你已安裝 [pnpm](https://pnpm.io/)。
 
-在專案根目錄執行以下命令，將同時安裝或執行前後端套件。
+如果你在專案根目錄執行以下命令，前後端套件都會被安裝或執行。
 
 ### 安裝依賴套件
 
@@ -61,4 +61,42 @@ pnpm dev
 
 ```bash
 pnpm build:frontend
+```
+
+## 如何部署
+
+部署 Node.js 應用程式非常簡單。Astro 是靜態網站生成器，因此可以部署到任何靜態託管服務，GitHub pages、三角形公司 Vercel、網路活佛 Cloudflare Pages、Netlify、Zeabur... 你爽就好。Fastify 可以部署到任何 Node.js 託管服務。
+
+### Zeabur (Astro + Fastify)
+
+選擇從 GitHub 或任何你想要的地方部署。前端應該預設部署，因為它是第一個。
+
+如果你想部署後端，可以添加以下環境變數：
+
+```plaintext
+ZBPACK_APP_DIR=backend
+```
+
+兩個專案可以部署在一個 Project 中，但是兩個分開的服務。可以使用 Caddy 或 Nginx 來反向代理。
+
+這裡是一個簡單的 Caddyfile 範例，把 `/api` 路徑的請求以及 `/openapi.json` 反向代理到後端服務，其他的都丟給前端：
+
+```plaintext
+:80 {
+    @backend path /api* /openapi.json
+    reverse_proxy @backend backend.zeabur.internal:8000
+    reverse_proxy frontend.zeabur.internal:8080
+}
+```
+
+### Github Pages (Astro)
+
+GitHub Pages 只支援靜態檔案，所以你只能部署前端。在你的儲存庫中配置 `.github/workflows/gh-pages.yml` 工作流程以開啟觸發器。
+
+```yml
+on:
+    push:
+        branches: ["main"]
+        paths: ["frontend/**"]
+    workflow_dispatch:
 ```
