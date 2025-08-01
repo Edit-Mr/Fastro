@@ -8,8 +8,6 @@ EM's Website starter template using Astro and Fastify.
 
 ## Features
 
-- **Astro**: A modern static site generator.
-  - Sitemap
-  - i18n
+- **Astro**: With Sitemap and i18n intergration.
 - **Fastify**: A fast and low overhead web framework for Node.js.
 - **Prettier**: Code formatter to maintain consistent style.

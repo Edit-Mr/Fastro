@@ -1,16 +1,16 @@
+import { defaultLocale, locales } from "./config.js";
+
 export const t = (lang, data) => {
 	const result = {};
 	for (const key in data) {
-		result[key] = data[key][lang] || data[key]["en"];
+		result[key] = data[key][lang] || data[key][defaultLocale];
 	}
 	result.t = Object.keys(data[Object.keys(data || {})[0]]);
-	console.log("i18n t:", result.t);
 	return result;
 };
-
-export const local = url => {
-	const langs = ["en", "zh-Hant", "zh-Hans"];
-	return langs.find(lang => url.toString().startsWith(`/${lang}`)) || "en";
+export const localesList = () => Object.keys(locales);
+export const local = url => {	
+	return localesList().find(lang => url.toString().startsWith(`/${lang}`)) || defaultLocale;
 };
 
 export const l = url => {

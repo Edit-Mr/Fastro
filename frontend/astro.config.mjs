@@ -2,25 +2,19 @@
 import sitemap from "@astrojs/sitemap";
 import { filterSitemapByDefaultLocale, i18n } from "astro-i18n-aut/integration";
 import { defineConfig } from "astro/config";
-
-const defaultLocale = "en";
-const locales = {
-	en: "en-US", // the `defaultLocale` value must present in `locales` keys
-	"zh-Hant": "zh-Hant",
-	"zh-Hans": "zh-Hans"
-};
+import { defaultLocale, locales } from "./src/i18n/config.js";
 
 export default defineConfig({
-	site: "https://elvismao.com",
+	site: "https://example.com",
 	trailingSlash: "always",
 	build: {
 		format: "directory"
 	},
 	redirects: {
-		"/zh": {
-			status: 301,
-			destination: "/zh-Hant/"
-		}
+		// "/zh": {
+		// 	status: 301,
+		// 	destination: "/zh-Hant/"
+		// }
 	},
 	integrations: [
 		i18n({

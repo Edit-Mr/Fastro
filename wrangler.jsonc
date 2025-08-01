@@ -1,6 +1,6 @@
 {
-	"name": "elvismao",
-	"compatibility_date": "2025-06-01",
+	"name": "Fastro",
+	"compatibility_date": "2025-08-01",
 	"assets": {
 		"directory": "./dist",
 		"html_handling": "force-trailing-slash",

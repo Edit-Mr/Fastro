@@ -1,15 +1,19 @@
 ---
-const { i18n = [], path = "", favicon = true, ga = true, title, description, image, theme = "#000", lang = "en" } = Astro.props;
+import { defaultLocale } from "src/i18n/config";
+import { localesList, l } from "src/i18n";
+const { i18n = [], path = "", favicon = true, ga = true, title, description, image, theme = "#000", lang = defaultLocale } = Astro.props;
+const site = import.meta.env.SITE;
 const links = i18n
 	.map(lang => {
-		const url = lang === "en" ? "" : "/" + lang;
-		return `<link rel="alternate" hreflang="${lang}" href="https://elvismao.com${url}/${path}" />`;
+		const url = lang === defaultLocale ? "" : "/" + lang;
+		return `<link rel="alternate" hreflang="${lang}" href="${site}${url}/${path}" />`;
 	})
 	.join("\n");
-
-const xDefault = `<link rel="alternate" hreflang="x-default" href="https://elvismao.com/${path}" />`;
-const canonical = `https://elvismao.com/${path}`;
-const fullImage = `https://elvismao.com${image}`;
+const xDefault = `<link rel="alternate" hreflang="x-default" href="${site}/${path}" />`;
+const canonical = `${site}/${path}`;
+const fullImage = image?.startsWith("http") ? image : image ? `${site}${image}` : null;
+let url = l(Astro.url);
+const supportedLangs = localesList();
 ---
 
 <!doctype html>
@@ -29,6 +33,28 @@ const fullImage = `https://elvismao.com${image}`;
 
 		<!-- i18n alternate links -->
 		<Fragment set:html={`${links}\n${xDefault}`} />
+
+		<script define:vars={{ supportedLangs, defaultLocale }}>
+			const local = url => {
+				return supportedLangs.find(lang => url.toString().startsWith(`/${lang}`)) || defaultLocale;
+			};
+
+			const l = (path, lang = "") => {
+				const currentLocale = local(window.location.pathname);
+				const base = lang || currentLocale;
+				if (!path) path = window.location.pathname.replace(`${currentLocale}/`, "");
+				return `/${base}${path}`;
+			};
+
+			const currentLang = window.location.pathname.split("/")[1];
+			if (!supportedLangs.includes(currentLang)) {
+				let savedLang = localStorage.getItem("preferredLang") || navigator.language;
+				savedLang = savedLang.replace("zh-TW", "zh-Hant").replace("zh-CN", "zh-Hans").replace("en-US", "en");
+				savedLang = savedLang == "zh" ? "zh-Hant" : savedLang;
+				console.log(savedLang, supportedLangs);
+				if (savedLang && supportedLangs.includes(savedLang)) window.location.href = l("", savedLang);
+			}
+		</script>
 
 		<!-- Favicon -->
 		{
@@ -62,6 +88,14 @@ gtag('config', 'G-9R5PZG2VQG');`}
 	</head>
 	<body>
 		<slot />
+		<script define:vars={{ supportedLangs }}>
+			document.querySelectorAll("[data-lang]").forEach(link => {
+				link.addEventListener("click", function (e) {
+					const lang = link.getAttribute("data-lang");
+					if (supportedLangs.includes(lang)) localStorage.setItem("preferredLang", lang);
+				});
+			});
+		</script>
 	</body>
 </html>
 

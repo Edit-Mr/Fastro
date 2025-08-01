@@ -17,9 +17,9 @@ const t = i18n.t(i18n.local(Astro.url.pathname), {
 
 <nav>
 	<!-- <a href={l("/about/")}><span>{t.about}</span></a> -->
-	<a href={l("", "en")}>English</a>
-	<a href={l("", "zh-Hant")}>繁體中文</a>
-	<a href={l("", "zh-Hans")}>简体中文</a>
+	<a href={l("", "en")} data-lang="en">English</a>
+	<a href={l("", "zh-Hant")} data-lang="zh-Hant">繁體中文</a>
+	<a href={l("", "zh-Hans")} data-lang="zh-Hans">简体中文</a>
 </nav>
 
 <style>
