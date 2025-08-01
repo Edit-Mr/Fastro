@@ -62,3 +62,15 @@ pnpm dev
 ```bash
 pnpm build:frontend
 ```
+
+## How to Deploy
+
+### Zeabur
+
+Choose to deploy from GitHub or wherever you want. Frontend should be deployed as default since it is the first one.
+
+If you wanna deploy backend, you can add the following environment variables:
+
+```plaintext
+ZBPACK_APP_DIR=backend
+```
