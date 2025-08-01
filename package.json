@@ -1,10 +1,15 @@
 {
+	"name": "fastro",
+	"version": "1.0.0",
+	"author": "Elvis Mao",
+	"license": "Apache-2.0",
 	"scripts": {
 		"dev:frontend": "pnpm --filter frontend dev",
 		"dev:backend": "pnpm --filter backend dev",
 		"dev": "concurrently \"pnpm dev:frontend\" \"pnpm dev:backend\"",
 		"format": "prettier --write .",
-		"check-format": "prettier --check ."
+		"check-format": "prettier --check .",
+		"build:frontend": "pnpm --filter frontend build"
 	},
 	"devDependencies": {
 		"concurrently": "^9.2.0",
