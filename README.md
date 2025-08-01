@@ -19,6 +19,7 @@ EM's Website starter template using Astro and Fastify.
     - Save language preference in local storage.
 - **Fastify**: A fast and low overhead web framework for Node.js.
 - **Prettier**: Code formatter to maintain consistent style.
+- **concurrently**: Run frontend and backend at the same time.
 
 ## How to use
 
