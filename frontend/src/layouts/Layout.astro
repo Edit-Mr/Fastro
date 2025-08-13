@@ -41,7 +41,8 @@ const supportedLangs = localesList();
 
 			const l = (path, lang = "") => {
 				const currentLocale = local(window.location.pathname);
-				const base = lang || currentLocale;
+				let base = lang || currentLocale;
+				base = defaultLocale == base ? "" : base;
 				if (!path) path = window.location.pathname.replace(`${currentLocale}/`, "");
 				return `/${base}${path}`;
 			};
