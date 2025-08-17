@@ -1,6 +1,7 @@
 ---
 import { defaultLocale } from "src/i18n/config";
 import { localesList, l } from "src/i18n";
+import { ClientRouter } from "astro:transitions";
 const { i18n = [], path = "", favicon = true, ga = true, title, description, image, theme = "#000", lang = defaultLocale } = Astro.props;
 const site = import.meta.env.SITE;
 const links = i18n
@@ -30,10 +31,9 @@ const supportedLangs = localesList();
 		{fullImage && image && <meta property="og:image" content={fullImage} />}
 		{description && <meta property="og:description" content={description} />}
 		{theme && <meta name="theme-color" content={theme} />}
-
 		<!-- i18n alternate links -->
 		<Fragment set:html={`${links}\n${xDefault}`} />
-
+		<ClientRouter />
 		<script define:vars={{ supportedLangs, defaultLocale }}>
 			const local = url => {
 				return supportedLangs.find(lang => url.toString().startsWith(`/${lang}`)) || defaultLocale;
